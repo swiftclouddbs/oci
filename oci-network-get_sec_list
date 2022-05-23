@@ -1,0 +1,76 @@
+oci network security-list get --security-list-id ocid1.securitylist.oc1.iad.aaaaaaaa7nkvg3q6zltd3wgsdjfwudh2b5hLOST_DATA_rw6ka
+{
+  "data": {
+    "compartment-id": "ocid1.tenancy.oc1..aaaaaaaai35twafhkxkfhLOST_DATA_l6ezq",
+    "defined-tags": {
+      "Oracle-Tags": {
+        "CreatedBy": "oracleidentitycloudservice/rxtuar1@yahoax.de",
+        "CreatedOn": "2020-07-13T05:47:12.027Z"
+      }
+    },
+    "display-name": "Default Security List for vcn-20200713-0143",
+    "egress-security-rules": [
+      {
+        "description": null,
+        "destination": "0.0.0.0/0",
+        "destination-type": "CIDR_BLOCK",
+        "icmp-options": null,
+        "is-stateless": false,
+        "protocol": "all",
+        "tcp-options": null,
+        "udp-options": null
+      }
+    ],
+    "freeform-tags": {},
+    "id": "ocid1.securitylist.oc1.iad.aaaaaaaa7nkvg3q6zlLOST_DATA_l6iyectksyurw6ka",
+    "ingress-security-rules": [
+      {
+        "description": null,
+        "icmp-options": null,
+        "is-stateless": false,
+        "protocol": "6",
+        "source": "0.0.0.0/0",
+        "source-type": "CIDR_BLOCK",
+        "tcp-options": {
+          "destination-port-range": {
+            "max": 22,
+            "min": 22
+          },
+          "source-port-range": null
+        },
+        "udp-options": null
+      },
+      {
+        "description": null,
+        "icmp-options": {
+          "code": 4,
+          "type": 3
+        },
+        "is-stateless": false,
+        "protocol": "1",
+        "source": "0.0.0.0/0",
+        "source-type": "CIDR_BLOCK",
+        "tcp-options": null,
+        "udp-options": null
+      },
+      {
+        "description": null,
+        "icmp-options": {
+          "code": null,
+          "type": 3
+        },
+        "is-stateless": false,
+        "protocol": "1",
+        "source": "10.0.0.0/16",
+        "source-type": "CIDR_BLOCK",
+        "tcp-options": null,
+        "udp-options": null
+      }
+    ],
+    "lifecycle-state": "AVAILABLE",
+    "time-created": "2020-07-13T05:47:12.031000+00:00",
+    "vcn-id": "ocid1.vcn.oc1.iad.amaaaaaaezx4sLOST_DATA_l6gbwwvdlhuaksjo6y3flhq"
+  },
+  "etag": "22519df3"
+}
+[opc@instance-20220213-0944 oci_dev]$ 
