@@ -1,0 +1,5 @@
+rsync -av -e 'ssh -i bak-ssh.key' realestate backupuser@1xx.xxx.203.70:/dbakups/ubu
+rsync -av -e 'ssh -i bak-ssh.key' python_dev backupuser@1xx.xxx.203.70:/dbakups/ubu
+rsync -av -e 'ssh -i bak-ssh.key' olm backupuser@1xx.xxx.203.70:/dbakups/ubu
+rsync -av -e 'ssh -i bak-ssh.key' TTCA backupuser@1xx.xxx.203.70:/dbakups/ubu
+rsync -av -e 'ssh -i bak-ssh.key' health backupuser@1xx.xxx.203.70:/dbakups/ubu
