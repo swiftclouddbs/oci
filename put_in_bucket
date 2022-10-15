@@ -1,0 +1,3 @@
+oci os object sync -bn win10 --src-dir /dbakups/win10
+
+oci os object sync -bn ubu --src-dir /dbakups/ubu
