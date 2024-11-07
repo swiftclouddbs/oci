@@ -1,0 +1,25 @@
+import gradio as gr
+import google.generativeai as ai
+
+def process_query(query):
+    prompt = f"Provide a Python code solution using OCI CloudShell to address the following prompt: {query}"
+    ai.configure(api_key="AIzaSyAUvJhcDh9ZkdQbVNf4alQl5ZKVWfJsKtw")
+    model = ai.GenerativeModel(model_name="gemini-1.5-flash")
+    response = model.generate_content(prompt)
+    return response.text
+
+iface = gr.Interface(
+    fn=process_query,
+    # Access the actual Textbox component from the Column
+    inputs=gr.Column([gr.Textbox(lines=2, label="Your Question")]).components[0],
+    outputs=gr.Column([
+        gr.Textbox(label="Response")
+    ]).components[0],
+    title="World Pay OCI Admin Code Generator",
+    description="""
+        <center>Ask your OCI code questions here. We'll provide Python solutions using OCI CloudShell.
+        <br>by Reggie Stuart</center>
+    """
+)
+
+iface.launch(server_name="0.0.0.0", server_port=7860)
