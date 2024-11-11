@@ -1,0 +1,72 @@
+#Create 10 subnets and a default route table in them
+import oci
+import time
+
+# Configure OCI
+config = oci.config.from_file()
+identity = oci.identity.IdentityClient(config)
+network_client = oci.core.VirtualNetworkClient(config)
+
+# Define your VCN and Compartment IDs
+vcn_id = 'ocid1.vcn.XXXX'  # Replace with your VCN ID
+compartment_id = 'ocid1.tenancy.XXXXXX'  # Replace with your compartment ID
+
+# Define subnet details
+subnet_names = ['Subnet1', 'Subnet2', 'Subnet3', 'Subnet4', 'Subnet5', 'Subnet6', 'Subnet7', 'Subnet8', 'Subnet9', 'Subnet10']
+subnet_cidrs = ['172.16.1.0/24', '172.16.2.0/24', '172.16.3.0/24', '172.16.4.0/24', '172.16.5.0/24', 
+                '172.16.6.0/24', '172.16.7.0/24', '172.16.8.0/24', '172.16.9.0/24', '172.16.10.0/24']
+
+# Get a list of availability domains
+availability_domains = identity.list_availability_domains(compartment_id).data
+
+# Ensure you have at least one availability domain
+if not availability_domains:
+    print("No availability domains found in this compartment.")
+else:
+    # Create subnets and route tables
+    for i in range(len(subnet_names)):
+        # Use round-robin to distribute subnets across availability domains
+        availability_domain = availability_domains[i % len(availability_domains)].name
+
+        # Define the subnet details
+        subnet_details = oci.core.models.CreateSubnetDetails(
+            display_name=subnet_names[i],
+            compartment_id=compartment_id,
+            vcn_id=vcn_id,
+            cidr_block=subnet_cidrs[i],
+            availability_domain=availability_domain
+        )
+
+        try:
+            # Create the subnet
+            subnet_response = network_client.create_subnet(subnet_details)
+            subnet_id = subnet_response.data.id
+            print(f'Subnet {subnet_names[i]} created successfully with ID: {subnet_id}')
+
+            # Pause to allow OCI time to process the subnet creation
+            time.sleep(5)
+
+            # Create a route table for the subnet
+            route_table_details = oci.core.models.CreateRouteTableDetails(
+                compartment_id=compartment_id,
+                vcn_id=vcn_id,
+                display_name=f"{subnet_names[i]}_RouteTable",
+                route_rules=[]  # Add route rules as needed
+            )
+            route_table_response = network_client.create_route_table(route_table_details)
+            route_table_id = route_table_response.data.id
+            print(f'Route table for {subnet_names[i]} created successfully with ID: {route_table_id}')
+
+            # Update the subnet with the route table
+            update_subnet_details = oci.core.models.UpdateSubnetDetails(
+                route_table_id=route_table_id
+            )
+            network_client.update_subnet(subnet_id, update_subnet_details)
+            print(f'Route table {route_table_id} associated with subnet {subnet_names[i]}')
+
+        except oci.exceptions.ServiceError as e:
+            print(f'Error creating subnet or route table for {subnet_names[i]}: {e}')
+
+    print('Subnet and route table creation complete.')
+
+rstuar1@cloudshell:scripts (us-ashburn-1)$ 
